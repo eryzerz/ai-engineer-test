@@ -21,7 +21,7 @@ TABLE receipts:
 - receipt_date DATE (purchase date, YYYY-MM-DD)
 - total_amount NUMERIC(10,2)
 - tax_amount NUMERIC(10,2)
-- items JSONB — array of objects: item_name (string), quantity (int), unit_price (float), total_price (float)
+- items JSONB — array of objects: item_name (string), quantity (float, may be fractional e.g. gallons), unit_price (float), total_price (float)
 - created_at TIMESTAMP (row insert time)
 
 RULES:

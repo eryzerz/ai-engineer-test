@@ -16,6 +16,7 @@ RULES:
 1. Output ONLY valid JSON. Do not include markdown formatting, code blocks, or conversational text.
 2. If a specific field is unreadable or missing from the receipt, return `null` for that field.
 3. Ensure all mathematical fields (prices, quantities) are returned as numbers (floats/integers), not strings.
+   Quantity may be fractional (e.g. fuel gallons, weighted produce) — use a float when needed, not rounded to a whole number.
 4. Date must be formatted strictly as YYYY-MM-DD. If the year is missing, assume the current year.
 
 SCHEMA:
@@ -27,7 +28,7 @@ SCHEMA:
   "items": [
     {
       "item_name": "string",
-      "quantity": integer,
+      "quantity": float,
       "unit_price": float,
       "total_price": float
     }
@@ -40,7 +41,7 @@ class LineItem(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
     item_name: str | None = None
-    quantity: int | None = None
+    quantity: float | None = None
     unit_price: float | None = None
     total_price: float | None = None
 
