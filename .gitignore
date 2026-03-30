@@ -10,7 +10,6 @@ data/*
 
 # Secrets
 .env
-.env.*
 
 # Vector / local DB artifacts (e.g. interview demos)
 **/qdrant_data/
