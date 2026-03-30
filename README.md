@@ -4,6 +4,9 @@
 
 To test the 1 & 2 properly, Add the customers-100000.csv and customers-2000000.csv in [`/coding-test/data/`](data/).
 
+## KNOWLEDGE TEST AND CODING TEST VIDEOS
+To see the answers for knowledge test and videos of coding test, go to this [drive folder](https://drive.google.com/drive/folders/1wW8zdVp_IoTrPSMdvzS3Yo2tDzyuEKUl?usp=sharing)
+
 ## Index
 
 1. [1-small-parse.ipynb](1-small-parse.ipynb)
