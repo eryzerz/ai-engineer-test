@@ -1,0 +1,16 @@
+# Local env & caches
+.venv/
+__pycache__/
+*.py[cod]
+.Python
+*.egg-info/
+.eggs/
+
+data/*
+
+# Secrets
+.env
+.env.*
+
+# Vector / local DB artifacts (e.g. interview demos)
+**/qdrant_data/
