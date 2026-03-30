@@ -8,6 +8,7 @@
 
    - Set `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB` .
    - Set **`GOOGLE_API_KEY`** or **`GEMINI_API_KEY`** (optional `GEMINI_MODEL`, default `gemini-3-flash-preview` in Compose).
+   - Set **RAG / embeddings:** optional `GEMINI_EMBEDDING_MODEL` (default `gemini-embedding-001`).
 
 3. **Start the stack:**
 
@@ -21,6 +22,16 @@ To stop: `Ctrl+C`, then `docker compose down`
 
 ## Project layout
 
-- `mcp/server.py` — FastMCP + `streamable-http` on port **8000**
-- `streamlit/app.py` — MCP client via `mcp.client.streamable_http`
+- `mcp/server.py` — FastMCP + `streamable-http` on port **8000** (`query_postgres`, `insert_receipt`, vector tools)
+- `streamlit/` — Streamlit app + `receipt_rag.py` (embeddings), `qa_flow.py` (SQL Q&A)
 - `docker/postgres/init/01-receipts.sql` — `receipts` table
+- `docker/postgres/init/02-receipt-embeddings.sql` — pgvector + `receipt_embeddings`
+
+## Tests
+
+```bash
+pip install -r streamlit/requirements.txt
+pytest tests/ -q
+```
+
+CI (`.github/workflows/expense-manager-ci.yml`) validates Compose and builds images; use the commands above locally for pytest.

@@ -5,7 +5,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY app.py receipt_extract.py mcp_client.py qa_flow.py ./
+COPY app.py receipt_extract.py receipt_rag.py mcp_client.py qa_flow.py ./
 COPY pages ./pages
 
 EXPOSE 8501

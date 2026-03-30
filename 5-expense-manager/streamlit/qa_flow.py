@@ -124,6 +124,7 @@ def synthesize_answer(
     rows: list[dict[str, Any]],
     *,
     max_rows: int = 100,
+    context_note: str | None = None,
 ) -> str:
     truncated = rows[:max_rows]
     truncated_note = len(rows) > max_rows
@@ -133,6 +134,8 @@ def synthesize_answer(
         row_count=len(truncated),
         rows_json=rows_json,
     )
+    if context_note:
+        prompt = context_note.strip() + "\n\n" + prompt
     if truncated_note:
         prompt += f"\nNote: Total rows from query was {len(rows)}; only the first {max_rows} are shown above.\n"
 

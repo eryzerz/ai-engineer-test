@@ -45,6 +45,37 @@ async def call_query_postgres(sql: str):
     return await _with_session(inner)
 
 
+async def call_upsert_receipt_embedding(receipt_id: int, content: str, embedding_json: str):
+    async def inner(session: ClientSession):
+        return await session.call_tool(
+            "upsert_receipt_embedding",
+            {
+                "receipt_id": receipt_id,
+                "content": content,
+                "embedding_json": embedding_json,
+            },
+        )
+
+    return await _with_session(inner)
+
+
+async def call_search_receipts_by_vector(embedding_json: str, match_count: int = 5):
+    async def inner(session: ClientSession):
+        return await session.call_tool(
+            "search_receipts_by_vector",
+            {"embedding_json": embedding_json, "match_count": match_count},
+        )
+
+    return await _with_session(inner)
+
+
+async def call_list_receipts_missing_embeddings():
+    async def inner(session: ClientSession):
+        return await session.call_tool("list_receipts_missing_embeddings", {})
+
+    return await _with_session(inner)
+
+
 async def call_insert_receipt(
     store_name: str,
     receipt_date: str,
@@ -88,6 +119,35 @@ def query_receipts_rows() -> list[dict[str, Any]]:
         "FROM receipts ORDER BY id DESC"
     )
     return query_rows_json(sql)
+
+
+def upsert_receipt_embedding(receipt_id: int, content: str, embedding: list[float]) -> None:
+    res = run(call_upsert_receipt_embedding(receipt_id, content, json.dumps(embedding)))
+    text = tool_result_text(res).strip()
+    if not text:
+        raise ValueError("Empty response from upsert_receipt_embedding")
+
+
+def search_receipts_by_vector(embedding: list[float], match_count: int = 5) -> list[dict[str, Any]]:
+    res = run(call_search_receipts_by_vector(json.dumps(embedding), match_count))
+    text = tool_result_text(res).strip()
+    if not text:
+        return []
+    data = json.loads(text)
+    if not isinstance(data, list):
+        raise ValueError("Expected list from search_receipts_by_vector")
+    return data
+
+
+def list_receipts_missing_embeddings() -> list[dict[str, Any]]:
+    res = run(call_list_receipts_missing_embeddings())
+    text = tool_result_text(res).strip()
+    if not text:
+        return []
+    data = json.loads(text)
+    if not isinstance(data, list):
+        raise ValueError("Expected list from list_receipts_missing_embeddings")
+    return data
 
 
 def format_item_names(items_val: Any) -> str:
